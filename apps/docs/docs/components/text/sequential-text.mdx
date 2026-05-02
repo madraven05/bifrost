@@ -1,0 +1,137 @@
+---
+title: Sequential Text
+sidebar_position: 1
+sidebar_custom_props:
+  previewVideo: /img/sequential-text.mp4
+description: Reveal words one by one using the current Remotion frame.
+---
+
+# Sequential Text
+
+`SequentialText` reveals words progressively based on the current Remotion frame. It is useful for headlines, callouts, lyric-style timing, and any text treatment where each word should enter in sequence.
+
+## Preview
+
+<video
+  autoPlay
+  controls
+  loop
+  muted
+  playsInline
+  style={{ width: "100%", borderRadius: "16px" }}
+>
+  <source src="/img/sequential-text.mp4" type="video/mp4" />
+</video>
+
+## Import
+
+```tsx
+import { SequentialText } from "@bifrost/core";
+```
+
+## Basic Usage
+
+```tsx
+import { AbsoluteFill } from "remotion";
+import { SequentialText } from "@bifrost/core";
+
+export const IntroTitle = () => {
+  return (
+    <AbsoluteFill className="items-center justify-center bg-white">
+      <SequentialText
+        words={["Build", "videos", "with", "code."]}
+        staggerInFrames={14}
+        enterDurationInFrames={22}
+        gap={18}
+        colors={["#515151", "#515151", "#515151", "#22d3ee"]}
+        easing="exponential"
+        wordStyle={{
+          fontSize: 96,
+          fontWeight: 800,
+          letterSpacing: -2,
+          lineHeight: 1,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+```
+
+## Using `text` Instead Of `words`
+
+If you already have a sentence as a string, pass `text` and the component will split it on whitespace.
+
+```tsx
+<SequentialText
+  text="Ship faster with Bifrost."
+  staggerInFrames={16}
+  enterDurationInFrames={28}
+/>
+```
+
+## Custom Word Rendering
+
+Use `renderWord` when you want full control over the output of each word. The callback receives the per-word reveal state so you can drive your own transforms, opacity, or layout.
+
+```tsx
+<SequentialText
+  words={["Create", "something", "loud"]}
+  staggerInFrames={10}
+  enterDurationInFrames={16}
+  renderWord={({ word, index, progress, isVisible }) => (
+    <span
+      key={word}
+      style={{
+        display: "inline-block",
+        marginLeft: index === 0 ? 0 : 16,
+        opacity: isVisible ? Math.min(progress, 1) : 0,
+        transform: `translateY(${(1 - Math.min(progress, 1)) * 24}px)`,
+        color: index === 2 ? "#ef4444" : "#111827",
+        fontSize: 72,
+        fontWeight: 800,
+      }}
+    >
+      {word}
+    </span>
+  )}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `words` | `string[]` | `undefined` | Explicit list of words to reveal. |
+| `text` | `string` | `undefined` | Sentence to split on whitespace when `words` is not provided. |
+| `staggerInFrames` | `number` | `15` | Delay between the start of each word reveal. |
+| `enterDurationInFrames` | `number` | `12` | Duration of each word's reveal animation. |
+| `startAtFrame` | `number` | `0` | Global frame where the first word starts animating. |
+| `gap` | `number \| string` | `12` | Space between words. Numeric values are treated as pixels. |
+| `align` | `"start" \| "center" \| "end"` | `"center"` | Horizontal alignment of the full text row. |
+| `colors` | `string[]` | `undefined` | Optional per-word text colors. |
+| `className` | `string` | `undefined` | Applied to the outer wrapper. |
+| `wordClassName` | `string` | `undefined` | Applied to each rendered word span. |
+| `style` | `CSSProperties` | `undefined` | Inline styles for the outer wrapper. |
+| `wordStyle` | `CSSProperties` | `undefined` | Inline styles for each word. |
+| `renderWord` | `(ctx) => ReactNode` | `undefined` | Custom renderer for each word. When provided, you own the word markup and animation. |
+| `easing` | `"spring" \| "cubic" \| "exponential" \| "bounce" \| ((t) => number)` | `"cubic"` | Easing used for the default reveal animation. |
+| `springConfig` | `{ damping?: number; mass?: number; stiffness?: number; overshootClamping?: boolean }` | `undefined` | Optional spring tuning when `easing="spring"`. |
+
+## `renderWord` Context
+
+The `renderWord` callback receives:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `word` | `string` | Current word content. |
+| `index` | `number` | Zero-based word index. |
+| `progress` | `number` | Reveal progress for that word. For spring easing this may overshoot above `1`. |
+| `frame` | `number` | Local frame for the word, starting at `0` when that word begins. |
+| `isVisible` | `boolean` | Whether the global frame has reached this word's start frame. |
+
+## Behavior Notes
+
+- Pass either `words` or `text`. If both are provided, `words` takes precedence.
+- The default renderer animates word width, opacity, and spacing so words appear to expand into place.
+- `springConfig` only affects the default renderer when `easing="spring"`.
+- `colors` are applied by index, so you can highlight individual words without custom rendering.

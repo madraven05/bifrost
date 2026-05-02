@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+apps/*/node_modules/
+packages/*/*/node_modules/
+playground/node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+.turbo/
+.cache/
+apps/*/.docusaurus/
+apps/*/build/
+apps/*/.cache/
+packages/*/*/dist/
+packages/*/*/build/
+playground/build/
+
+# Local package linking
+playground/.yalc/
+playground/yalc.lock
+playground/.git.disabled/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# OS files
+.DS_Store
+.codex

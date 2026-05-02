@@ -1,0 +1,291 @@
+/**
+ * Bifrost — modern brand aesthetic.
+ * Light: pure white. Dark: pure black.
+ * Brand accent: prism rainbow (used sparingly — gradient text, glow, brand mark).
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Comme:wght@100..900&family=JetBrains+Mono:wght@400..700&display=swap");
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@source "../../docs/**/*.{md,mdx}";
+@source "../../blog/**/*.{md,mdx}";
+@source "../**/*.{js,jsx,ts,tsx}";
+
+@theme {
+  --font-sans: "Comme", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-bifrost-violet: #8b5cf6;
+  --color-bifrost-indigo: #6366f1;
+  --color-bifrost-blue: #3b82f6;
+  --color-bifrost-cyan: #06b6d4;
+  --color-bifrost-green: #10b981;
+  --color-bifrost-amber: #f59e0b;
+  --color-bifrost-rose: #f43f5e;
+
+  --radius-xl2: 1.25rem;
+}
+
+:root {
+  --ifm-font-family-base: "Comme", system-ui, -apple-system, sans-serif;
+  --ifm-heading-font-family: "Comme", system-ui, -apple-system, sans-serif;
+  --ifm-font-family-monospace: "JetBrains Mono", ui-monospace, monospace;
+
+  --ifm-color-primary: #0a0a0a;
+  --ifm-color-primary-dark: #000000;
+  --ifm-color-primary-darker: #000000;
+  --ifm-color-primary-darkest: #000000;
+  --ifm-color-primary-light: #1a1a1a;
+  --ifm-color-primary-lighter: #262626;
+  --ifm-color-primary-lightest: #404040;
+
+  --ifm-background-color: transparent;
+  --ifm-background-surface-color: rgba(255, 255, 255, 0.7);
+  --ifm-color-content: #0a0a0a;
+  --ifm-heading-color: #050505;
+  --ifm-color-emphasis-100: rgba(10, 10, 10, 0.04);
+  --ifm-color-emphasis-200: rgba(10, 10, 10, 0.08);
+  --ifm-color-emphasis-300: rgba(10, 10, 10, 0.12);
+  --ifm-color-emphasis-700: rgba(10, 10, 10, 0.65);
+  --ifm-color-emphasis-800: rgba(10, 10, 10, 0.8);
+
+  --ifm-code-font-size: 95%;
+  --ifm-code-background: rgba(10, 10, 10, 0.06);
+  --ifm-navbar-background-color: transparent;
+  --ifm-footer-background-color: transparent;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.06);
+
+  --bifrost-bg-base: #ffffff;
+  --bifrost-bg-tint: #e7e7ea;
+  --bifrost-border: rgba(10, 10, 10, 0.08);
+  --bifrost-border-strong: rgba(10, 10, 10, 0.16);
+  --bifrost-surface: rgba(255, 255, 255, 0.55);
+  --bifrost-surface-strong: rgba(255, 255, 255, 0.85);
+  --bifrost-text-muted: rgba(10, 10, 10, 0.6);
+  --bifrost-glow: 0 0 80px -10px rgba(99, 102, 241, 0.25);
+}
+
+[data-theme="dark"] {
+  --ifm-color-primary: #ffffff;
+  --ifm-color-primary-dark: #f5f5f5;
+  --ifm-color-primary-darker: #e5e5e5;
+  --ifm-color-primary-darkest: #d4d4d4;
+  --ifm-color-primary-light: #ffffff;
+  --ifm-color-primary-lighter: #ffffff;
+  --ifm-color-primary-lightest: #ffffff;
+
+  --ifm-background-color: transparent;
+  --ifm-background-surface-color: rgba(10, 10, 10, 0.6);
+  --ifm-color-content: #ededed;
+  --ifm-heading-color: #ffffff;
+  --ifm-color-emphasis-100: rgba(255, 255, 255, 0.04);
+  --ifm-color-emphasis-200: rgba(255, 255, 255, 0.08);
+  --ifm-color-emphasis-300: rgba(255, 255, 255, 0.14);
+  --ifm-color-emphasis-700: rgba(255, 255, 255, 0.65);
+  --ifm-color-emphasis-800: rgba(255, 255, 255, 0.85);
+
+  --ifm-code-background: rgba(255, 255, 255, 0.06);
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.08);
+
+  --bifrost-bg-base: #000000;
+  --bifrost-bg-tint: #050505;
+  --bifrost-border: rgba(255, 255, 255, 0.08);
+  --bifrost-border-strong: rgba(255, 255, 255, 0.18);
+  --bifrost-surface: rgba(255, 255, 255, 0.03);
+  --bifrost-surface-strong: rgba(255, 255, 255, 0.06);
+  --bifrost-text-muted: rgba(255, 255, 255, 0.55);
+  --bifrost-glow: 0 0 120px -10px rgba(139, 92, 246, 0.35);
+}
+
+/* Page background — light: pure white. Dark: pure black with subtle violet bloom. */
+html,
+body {
+  background: var(--bifrost-bg-base);
+  color: var(--ifm-color-content);
+  font-weight: 300;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: #ffffff;
+}
+
+[data-theme="dark"] body::before {
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 60%),
+    #000000;
+}
+
+/* Subtle grain — adds analog texture, very low opacity. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+}
+
+[data-theme="dark"] body::after {
+  opacity: 0.04;
+}
+
+/* Brand prism gradient — used by GradientText, brand mark glow. */
+.bifrost-prism {
+  background: linear-gradient(
+    90deg,
+    var(--color-bifrost-violet),
+    var(--color-bifrost-indigo),
+    var(--color-bifrost-blue),
+    var(--color-bifrost-cyan),
+    var(--color-bifrost-green),
+    var(--color-bifrost-amber),
+    var(--color-bifrost-rose)
+  );
+}
+
+.bifrost-prism-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-bifrost-violet),
+    var(--color-bifrost-blue),
+    var(--color-bifrost-cyan),
+    var(--color-bifrost-green)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Aurora ribbon — animated soft prism arc behind hero. */
+@keyframes bifrost-aurora-drift {
+  0%, 100% { transform: translate3d(-5%, 0, 0) rotate(-2deg); opacity: 0.55; }
+  50% { transform: translate3d(5%, -2%, 0) rotate(2deg); opacity: 0.8; }
+}
+
+@keyframes bifrost-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.bifrost-aurora {
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 70%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: bifrost-aurora-drift 18s ease-in-out infinite;
+  background: conic-gradient(
+    from 200deg at 50% 50%,
+    rgba(139, 92, 246, 0.45),
+    rgba(59, 130, 246, 0.4),
+    rgba(6, 182, 212, 0.35),
+    rgba(16, 185, 129, 0.3),
+    rgba(245, 158, 11, 0.3),
+    rgba(244, 63, 94, 0.4),
+    rgba(139, 92, 246, 0.45)
+  );
+}
+
+[data-theme="dark"] .bifrost-aurora {
+  opacity: 0.45;
+  filter: blur(100px);
+}
+
+/* Glass surface — used by cards, navbar. */
+.bifrost-glass {
+  background: var(--bifrost-surface);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--bifrost-border);
+}
+
+.bifrost-glass-strong {
+  background: var(--bifrost-surface-strong);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--bifrost-border);
+}
+
+/* Hairline — single-pixel divider with brand glow. */
+.bifrost-hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--bifrost-border-strong) 20%,
+    var(--bifrost-border-strong) 80%,
+    transparent
+  );
+}
+
+/* Dotted grid pattern — used by hero background optionally. */
+.bifrost-grid-pattern {
+  background-image:
+    radial-gradient(circle, var(--bifrost-border-strong) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* Subtle elevation for content blocks. */
+.bifrost-elevated {
+  box-shadow:
+    0 1px 0 0 var(--bifrost-border) inset,
+    0 20px 60px -20px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .bifrost-elevated {
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+    0 20px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+/* Shimmer — used by brand mark + key buttons on hover. */
+.bifrost-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: bifrost-shimmer 3s linear infinite;
+}
+
+/* Selection — branded. */
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: inherit;
+}
+
+/* Docusaurus chrome polish.
+   `.navbar` class is required for Docusaurus internals (clientHeight reads,
+   sidebar offset). We keep the class but neutralize Infima's padding and
+   min-height so our own flex layout fully controls vertical centering. */
+.navbar {
+  box-shadow: none;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  display: block !important;
+}
+.navbar > * {
+  margin: 0 !important;
+}
+.footer { background: transparent; }
+.menu__link--active { font-weight: 600; }
+article a { text-underline-offset: 3px; }
+
+.theme-doc-sidebar-container {
+  border-right-color: var(--bifrost-border) !important;
+}

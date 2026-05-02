@@ -1,0 +1,9 @@
+{
+  "label": "Text",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "title": "Text",
+    "description": "Text-focused Bifrost components for Remotion compositions."
+  }
+}
