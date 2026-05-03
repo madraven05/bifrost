@@ -9,9 +9,11 @@
     "@bifrost/core": "file:.yalc/@bifrost/core",
     "@remotion/cli": "4.0.456",
     "@remotion/tailwind-v4": "4.0.456",
+    "clsx": "^2.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "remotion": "4.0.456",
+    "tailwind-merge": "^3.5.0",
     "tailwindcss": "4.0.0"
   },
   "devDependencies": {
