@@ -1,0 +1,173 @@
+---
+title: Typewriter Text
+sidebar_position: 2
+sidebar_custom_props:
+  previewVideo: /img/typewriter-text.mp4
+description: Reveal text character by character on a frame-driven timeline, like a typewriter.
+---
+
+# Typewriter Text
+
+`TypeWriterText` types text out one character at a time based on the current Remotion frame. It is useful for terminal-style intros, code reveals, dialogue, captions, and any moment where you want a sentence to land character by character.
+
+## Preview
+
+<video
+  autoPlay
+  controls
+  loop
+  muted
+  playsInline
+  style={{ width: "100%", borderRadius: "16px" }}
+>
+  <source src="/img/typewriter-text.mp4" type="video/mp4" />
+</video>
+
+## Import
+
+```tsx
+import { TypeWriterText } from "@bifrost/core";
+```
+
+## Basic Usage
+
+```tsx
+import { AbsoluteFill } from "remotion";
+import { TypeWriterText } from "@bifrost/core";
+
+export const IntroLine = () => {
+  return (
+    <AbsoluteFill className="items-center justify-center bg-white">
+      <TypeWriterText
+        text="Hello, world."
+        charsPerSecond={14}
+        punctuationPauseFrames={18}
+        showCursor
+        cursorBlinkFrames={15}
+        color="#1f2937"
+        style={{
+          fontFamily: "ui-monospace, Menlo, Consolas, monospace",
+          fontSize: 88,
+          fontWeight: 700,
+          letterSpacing: -1,
+          lineHeight: 1.1,
+        }}
+        cursorStyle={{ marginLeft: 4, color: "#22d3ee" }}
+      />
+    </AbsoluteFill>
+  );
+};
+```
+
+## Punctuation Pauses
+
+Set `punctuationPauseFrames` to insert a small dwell after sentence-level punctuation. The default trigger set is `.,!?;:`; override it with `punctuationChars` for languages or styles that need a different list.
+
+```tsx
+<TypeWriterText
+  text="Wait. Listen… now go!"
+  charsPerSecond={20}
+  punctuationPauseFrames={20}
+  punctuationChars=".,!?…"
+/>
+```
+
+## Human-Feeling Cadence
+
+Add jitter so individual characters arrive a little early or late. The same `humanizeSeed` always produces the same animation, so renders stay reproducible.
+
+```tsx
+<TypeWriterText
+  text="Type with style."
+  charsPerSecond={18}
+  humanizeJitterFrames={2}
+  humanizeSeed={7}
+  showCursor
+  cursorChar="▍"
+  hideCursorOnComplete
+/>
+```
+
+## Stable Layout
+
+When the typewriter sits next to other elements, set `preserveLayout` so unrevealed characters reserve their space with `visibility: hidden` instead of being removed from the flow. Surrounding content will not shift as the line types in.
+
+```tsx
+<TypeWriterText
+  text="Reserves the full line width from frame 0."
+  charsPerSecond={24}
+  preserveLayout
+/>
+```
+
+## Custom Character Rendering
+
+Use `renderChar` when you want full control over each character. The callback receives the per-character state so you can drive your own transforms, gradients, or staggered effects.
+
+```tsx
+<TypeWriterText
+  text="GLITCH"
+  charsPerSecond={8}
+  renderChar={({ char, index, isVisible, isCurrent }) => (
+    <span
+      key={index}
+      style={{
+        display: "inline-block",
+        opacity: isVisible ? 1 : 0,
+        transform: isCurrent ? "translateY(-4px)" : "none",
+        color: index % 2 === 0 ? "#ef4444" : "#111827",
+        fontSize: 96,
+        fontWeight: 800,
+      }}
+    >
+      {char}
+    </span>
+  )}
+/>
+```
+
+## Props
+
+| Prop | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `text` | `string` | — | Text to type out. Whitespace and newlines are preserved. |
+| `charsPerSecond` | `number` | `20` | Reveal rate. Combined with the composition `fps` to derive per-character frame delays. |
+| `startAtFrame` | `number` | `0` | Global frame where typing begins. |
+| `punctuationPauseFrames` | `number` | `0` | Extra frames inserted after each punctuation character. |
+| `punctuationChars` | `string` | `".,!?;:"` | Characters that trigger the punctuation pause. |
+| `humanizeJitterFrames` | `number` | `0` | Maximum random offset applied to each character's reveal frame. `0` disables jitter. |
+| `humanizeSeed` | `number` | `1` | Seed for the jitter PRNG. The same seed produces the same animation. |
+| `preserveLayout` | `boolean` | `false` | Reserve layout for unrevealed characters with `visibility: hidden` instead of removing them. |
+| `showCursor` | `boolean` | `false` | Render a blinking cursor at the typing position. |
+| `cursorChar` | `string` | `"\|"` | Character used for the cursor. |
+| `cursorBlinkFrames` | `number` | `15` | Blink half-period in frames. |
+| `hideCursorOnComplete` | `boolean` | `false` | Hide the cursor once the full string is revealed. |
+| `align` | `"start" \| "center" \| "end"` | `"start"` | Horizontal alignment of the line. |
+| `color` | `string` | `undefined` | Convenience text color applied to the wrapper. |
+| `className` | `string` | `undefined` | Applied to the outer wrapper. |
+| `charClassName` | `string` | `undefined` | Applied to each rendered character span. |
+| `cursorClassName` | `string` | `undefined` | Applied to the cursor span. |
+| `style` | `CSSProperties` | `undefined` | Inline styles for the outer wrapper. |
+| `charStyle` | `CSSProperties` | `undefined` | Inline styles for each character. |
+| `cursorStyle` | `CSSProperties` | `undefined` | Inline styles for the cursor. |
+| `renderChar` | `(ctx) => ReactNode` | `undefined` | Custom renderer for each character. When provided, you own the character markup and animation. |
+
+## `renderChar` Context
+
+The `renderChar` callback receives:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `char` | `string` | Current character content. |
+| `index` | `number` | Zero-based character index. |
+| `frame` | `number` | Local frame, starting at `0` when typing begins (after `startAtFrame`). |
+| `isVisible` | `boolean` | Whether this character has been typed yet at the current frame. |
+| `isCurrent` | `boolean` | `true` for the most recently typed character — useful for cursor-like accents. |
+
+## Behavior Notes
+
+- Reveal timing is fully derived from the current frame, so seeking and re-rendering are deterministic.
+- `humanizeJitterFrames` uses a seeded PRNG; identical `humanizeSeed` values produce identical animations across renders and machines.
+- `cursorBlinkFrames` is the half-period: a value of `15` at 30 fps yields a 1 Hz blink.
+- The wrapper uses `white-space: pre-wrap`, so spaces and explicit line breaks in `text` are preserved.
+- When `renderChar` is provided, the component still tracks `isVisible` and `isCurrent` for you, but visibility styling (hide/show, layout reservation) is your responsibility.
